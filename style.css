@@ -81,30 +81,37 @@ body {
 
 /* Typography elements */
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-mono);
-    font-weight: 700;
+    font-family: var(--font-sans);
+    font-weight: 600;
     color: var(--color-text-main);
-    line-height: 1.15;
-}
-
-h1 {
-    letter-spacing: -0.04em;
     line-height: 1.1;
 }
 
+h1 {
+    font-size: 5rem; /* 80px */
+    letter-spacing: -3.0px;
+    line-height: 1.05;
+    font-weight: 600;
+}
+
 h2 {
-    letter-spacing: -0.03em;
-    line-height: 1.2;
+    font-size: 3.5rem; /* 56px */
+    letter-spacing: -1.8px;
+    line-height: 1.1;
+    font-weight: 600;
 }
 
 h3 {
-    letter-spacing: -0.02em;
-    line-height: 1.3;
+    font-size: 1.375rem; /* 22px */
+    letter-spacing: -0.4px;
+    line-height: 1.25;
+    font-weight: 500;
 }
 
 p {
     color: var(--color-text-muted);
-    line-height: 1.6;
+    line-height: 1.5;
+    letter-spacing: -0.05px;
 }
 
 a {
@@ -443,8 +450,9 @@ a {
 }
 
 .hero-title {
-    font-size: 3.5rem;
-    line-height: 1.15;
+    font-size: 5rem;
+    line-height: 1.05;
+    letter-spacing: -3.0px;
 }
 
 .hero-subtitle {
@@ -511,17 +519,20 @@ a {
 }
 
 .section-badge {
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
     color: var(--color-accent-primary);
-    letter-spacing: 0.15em;
+    letter-spacing: 0.4px;
     display: inline-block;
     margin-bottom: 0.75rem;
+    text-transform: uppercase;
 }
 
 .section-title {
-    font-size: 2.25rem;
+    font-size: 3.5rem;
+    line-height: 1.10;
+    letter-spacing: -1.8px;
     margin-bottom: 1rem;
 }
 
@@ -551,7 +562,7 @@ a {
 .bento-card {
     background: var(--color-bg-card);
     border: 1px solid var(--color-hairline);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--border-radius-lg);
     padding: var(--spacing-md);
     display: flex;
     flex-direction: column;
@@ -1163,7 +1174,7 @@ a {
 .pricing-card {
     background: var(--color-bg-card);
     border: 1px solid var(--color-hairline);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--border-radius-lg);
     padding: 2.5rem 2rem;
     display: flex;
     flex-direction: column;

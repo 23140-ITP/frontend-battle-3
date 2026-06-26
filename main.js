@@ -48,10 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------------------------
     // 2. STATE-ISOLATED PRICING ENGINE (Feature 1)
     // ----------------------------------------------------------------------
+    // Multidimensional configuration matrix factoring in exchange rates and regional tariff variables
     const PRICING_MATRIX = {
-        USD: { symbol: '$', rate: 1.00 },
-        EUR: { symbol: '€', rate: 0.92 },
-        INR: { symbol: '₹', rate: 84.00 }
+        USD: { symbol: '$', rate: 1.00, tariff: 1.00 }, // Standard US Tariff
+        EUR: { symbol: '€', rate: 0.92, tariff: 1.05 }, // EU Regional Tariff adjustment (5% import tariff surcharge)
+        INR: { symbol: '₹', rate: 84.00, tariff: 0.95 } // India Regional Cost index adjustment (5% local cost reduction)
     };
 
     const TIER_BASE_RATES = {
@@ -95,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Object.keys(TIER_BASE_RATES).forEach(tier => {
             const baseRate = TIER_BASE_RATES[tier];
             const rateMultiplier = currencyConfig.rate;
+            const tariffModifier = currencyConfig.tariff;
             const currencySymbol = currencyConfig.symbol;
             
             let finalPrice;
@@ -103,12 +105,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isAnnual) {
                 // Apply flat 20% annual discount multiplier on the monthly rate
                 const monthlyRateWithDiscount = baseRate * 0.8;
-                finalPrice = Math.round(monthlyRateWithDiscount * rateMultiplier);
+                // Compute: base rate * regional rate multiplier * regional tariff * annual discount
+                finalPrice = Math.round(monthlyRateWithDiscount * rateMultiplier * tariffModifier);
                 
-                const totalYearlyCost = Math.round(baseRate * 12 * 0.8 * rateMultiplier);
+                const totalYearlyCost = Math.round(baseRate * 12 * 0.8 * rateMultiplier * tariffModifier);
                 subtextString = `Billed annually (${currencySymbol}${totalYearlyCost}/yr)`;
             } else {
-                finalPrice = Math.round(baseRate * rateMultiplier);
+                // Compute: base rate * regional rate multiplier * regional tariff
+                finalPrice = Math.round(baseRate * rateMultiplier * tariffModifier);
                 subtextString = 'Billed monthly';
             }
 

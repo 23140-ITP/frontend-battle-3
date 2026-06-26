@@ -637,6 +637,7 @@ a {
 }
 
 .hero-title {
+    font-family: var(--font-mono);
     font-size: 5rem;
     line-height: 1.05;
     letter-spacing: -3.0px;

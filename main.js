@@ -9,6 +9,75 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------------------------------------------------
+    // 0. PRETEXT LAYOUT ENGINE — Height-Aware Text Layout
+    // ----------------------------------------------------------------------
+    // Pattern 1: Basic height computation (Simple layout + Card/grid tier)
+    // Uses window.Pretext exposed by the inlined pretext.js in <head>
+    function initPretext() {
+        if (typeof window.Pretext === 'undefined') return;
+        const { prepare, layout } = window.Pretext;
+
+        const elements = document.querySelectorAll('[data-pretext]');
+        const prepared = new Map();
+
+        // PREPARE — one-time measurement after fonts are ready
+        document.fonts.ready.then(() => {
+            for (const el of elements) {
+                const text = el.textContent.trim();
+                if (!text) continue;
+                const font = getComputedStyle(el).font;
+                try {
+                    prepared.set(el, prepare(text, font));
+                } catch (e) {
+                    // Silently ignore elements where Pretext cannot parse the font string
+                }
+            }
+            relayout();
+        });
+
+        // LAYOUT — fast, called on every resize
+        function relayout() {
+            for (const [el, handle] of prepared) {
+                try {
+                    const style = getComputedStyle(el);
+                    const lineHeight = parseFloat(style.lineHeight) ||
+                        parseFloat(style.fontSize) * 1.5;
+                    const { height } = layout(handle, el.clientWidth, lineHeight);
+                    if (height > 0) {
+                        el.style.minHeight = `${height}px`;
+                    }
+                } catch (e) {
+                    // Skip elements where layout cannot compute
+                }
+            }
+        }
+
+        // RESIZE-AWARE — re-layout on every body resize (viewport changes)
+        new ResizeObserver(() => relayout()).observe(document.body);
+
+        // CONTENT-EDITABLE — re-prepare and re-layout when text is edited
+        for (const el of elements) {
+            if (el.contentEditable === 'true') {
+                new MutationObserver(() => {
+                    const text = el.textContent.trim();
+                    if (!text) return;
+                    const font = getComputedStyle(el).font;
+                    try {
+                        prepared.set(el, prepare(text, font));
+                        relayout();
+                    } catch (e) {
+                        // Silently ignore font parse errors on mutation
+                    }
+                }).observe(el, { characterData: true, subtree: true, childList: true });
+            }
+        }
+    }
+
+    // Initialize Pretext layout engine
+    initPretext();
+
+
+    // ----------------------------------------------------------------------
     // 1. ANNOUNCEMENT BANNER & COUNTDOWN TIMER
     // ----------------------------------------------------------------------
     const banner = document.getElementById('banner');

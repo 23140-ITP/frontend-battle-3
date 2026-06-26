@@ -129,7 +129,7 @@ a {
     font-family: var(--font-sans);
     font-weight: 600;
     font-size: 0.9rem;
-    border-radius: 6px;
+    border-radius: var(--border-radius-md);
     cursor: pointer;
     border: 1px solid transparent;
     transition: all var(--transition-micro);
@@ -219,7 +219,20 @@ a {
     border: 0;
 }
 
-/* Banner Component */
+/* Pretext-editable elements: suppress default outline, add subtle focus ring on edit */
+[contenteditable="true"] {
+    outline: none;
+    cursor: text;
+    caret-color: var(--color-accent-primary);
+}
+
+[contenteditable="true"]:focus {
+    outline: 1px solid var(--color-accent-focus);
+    outline-offset: 4px;
+    border-radius: var(--border-radius-xs);
+}
+
+
 .announcement-banner {
     background: linear-gradient(90deg, var(--color-bg-card-solid) 0%, var(--color-bg-base) 100%);
     border-bottom: 1px solid var(--color-hairline);

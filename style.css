@@ -163,25 +163,17 @@ a {
     min-height: 44px;
     min-width: 44px;
     transition: all var(--transition-micro), background var(--transition-micro);
-}
-    background: linear-gradient(135deg, var(--color-accent-primary) 0%, var(--color-accent-secondary) 100%);
+    background: var(--color-accent-primary);
     color: var(--color-bg-base);
     border-color: var(--color-accent-primary);
     box-shadow: 0 4px 12px rgba(255, 200, 1, 0.3);
 }
 
 .btn-primary:hover {
-    background: var(--color-accent-secondary);
-    border-color: var(--color-accent-secondary);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(255, 153, 50, 0.3);
-    /* subtle scale for hover */
+    background: var(--color-accent-focus);
+    border-color: var(--color-accent-focus);
     transform: scale(1.03) translateY(-1px);
-}
-    background: var(--color-accent-secondary);
-    border-color: var(--color-accent-secondary);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(255, 153, 50, 0.3);
+    box-shadow: 0 6px 16px rgba(255, 200, 1, 0.4);
 }
 
 .btn-secondary {
@@ -192,21 +184,11 @@ a {
     min-height: 44px;
     min-width: 44px;
 }
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--color-text-main);
-    border: 1px solid var(--color-hairline);
-    backdrop-filter: blur(10px);
-}
 
 .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.08);
     border-color: var(--color-hairline-strong);
-    transform: translateY(-1px);
     transform: scale(1.03) translateY(-1px);
-}
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--color-hairline-strong);
-    transform: translateY(-1px);
 }
 
 .btn-full {
@@ -316,16 +298,6 @@ a {
     transition: opacity var(--transition-micro), background var(--transition-micro);
     font-size: 0.85rem; /* slightly smaller text */
 }
-    background: linear-gradient(90deg, var(--color-bg-card-solid) 0%, var(--color-bg-base) 100%);
-    border-bottom: 1px solid var(--color-hairline);
-    padding: 0.5rem 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    z-index: 1000;
-    transition: opacity var(--transition-micro);
-}
 
 .banner-content {
     display: flex;
@@ -363,22 +335,6 @@ a {
     min-width: 44px;
     min-height: 44px;
 }
-.banner-close:hover {
-    color: var(--color-text-main);
-    background: rgba(255, 255, 255, 0.1);
-}
-    background: none;
-    border: none;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    padding: 0.25rem;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition-micro);
-}
-
 .banner-close:hover {
     color: var(--color-text-main);
     background: rgba(255, 255, 255, 0.1);
@@ -518,13 +474,6 @@ a {
     min-width: 44px;
     min-height: 44px;
 }
-    background: none;
-    border: none;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
 
 .search-input {
     background: none;
@@ -552,13 +501,6 @@ a {
     min-width: 44px;
     min-height: 44px;
     padding: var(--spacing-xs) var(--spacing-sm);
-}
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: var(--color-text-muted);
-    font-size: 0.9rem;
-    font-weight: 500;
 }
 
 .nav-link-docs:hover {
@@ -605,17 +547,25 @@ a {
     align-items: center;
     gap: 0.5rem;
     background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--color-hairline);
+    border: 1px solid rgba(255, 153, 50, 0.3); /* glowing saffron border */
     border-radius: 9999px;
     padding: 0.35rem 1rem;
     backdrop-filter: blur(5px);
     font-family: var(--font-mono);
+    transition: all var(--transition-micro);
+}
+
+.hero-tag:hover {
+    border-color: var(--color-accent-secondary);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 15px rgba(255, 153, 50, 0.15);
 }
 
 .tag-icon {
     display: flex;
     align-items: center;
     color: var(--color-accent-primary);
+    font-size: 0.9rem;
 }
 
 .tag-text {
@@ -693,12 +643,6 @@ a {
     color: rgba(241, 246, 244, 0.35);
     letter-spacing: 0.05em;
     min-width: 44px; /* ensure touch target on mobile */
-}
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: rgba(241, 246, 244, 0.35);
-    letter-spacing: 0.05em;
 }
 
 @keyframes scrollTicker {

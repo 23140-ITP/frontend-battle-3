@@ -499,7 +499,7 @@ a {
 .bento-accordion-wrapper {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 240px;
+    grid-auto-rows: 260px;
     gap: 1.5rem;
 }
 
@@ -1096,6 +1096,7 @@ a {
     border-radius: var(--border-radius-lg);
     padding: 3rem 2.5rem;
     position: relative;
+    transition: opacity var(--transition-micro), transform var(--transition-micro);
 }
 
 .testimonial-quote {

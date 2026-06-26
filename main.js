@@ -192,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Toggle Accordion expansion: if tap active, collapse it. Otherwise expand clicked.
                         if (isCurrentlyActive) {
                             card.classList.remove('active');
+                            activeBentoIndex = -1;
                         } else {
                             setActiveIndex(index);
                         }

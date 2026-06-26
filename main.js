@@ -1,0 +1,577 @@
+/* ==========================================================================
+   AetherFlow Interactive Engine (main.js)
+   Features:
+   - Dynamic Matrix Pricing Switcher (Performance-Isolated)
+   - Bento-to-Accordion Context Lock Wrapper
+   - Three.js Neural Plexus Hero Background (with Canvas2D Fallback)
+   - Countdown Timer, Banner Close, Testimonial Carousel & Scroll-to-Top
+   ========================================================================== */
+
+document.addEventListener('DOMContentLoaded', () => {
+    // ----------------------------------------------------------------------
+    // 1. ANNOUNCEMENT BANNER & COUNTDOWN TIMER
+    // ----------------------------------------------------------------------
+    const banner = document.getElementById('banner');
+    const closeBannerBtn = document.getElementById('close-banner');
+    const countdownEl = document.getElementById('countdown');
+
+    if (closeBannerBtn && banner) {
+        closeBannerBtn.addEventListener('click', () => {
+            banner.style.display = 'none';
+        });
+    }
+
+    // Initialize a 3-hour countdown timer
+    let duration = 3 * 60 * 60; // 3 hours in seconds
+    const startCountdown = () => {
+        const timer = setInterval(() => {
+            if (duration <= 0) {
+                clearInterval(timer);
+                if (countdownEl) countdownEl.textContent = "00h 00m 00s";
+                return;
+            }
+
+            duration--;
+            const hours = Math.floor(duration / 3600);
+            const minutes = Math.floor((duration % 3600) / 60);
+            const seconds = duration % 60;
+
+            const format = (num) => String(num).padStart(2, '0');
+            if (countdownEl) {
+                countdownEl.textContent = `${format(hours)}h ${format(minutes)}m ${format(seconds)}s`;
+            }
+        }, 1000);
+    };
+    startCountdown();
+
+
+    // ----------------------------------------------------------------------
+    // 2. STATE-ISOLATED PRICING ENGINE (Feature 1)
+    // ----------------------------------------------------------------------
+    const PRICING_MATRIX = {
+        USD: { symbol: '$', rate: 1.00 },
+        EUR: { symbol: '€', rate: 0.92 },
+        INR: { symbol: '₹', rate: 84.00 }
+    };
+
+    const TIER_BASE_RATES = {
+        starter: 29,
+        pro: 99,
+        enterprise: 249
+    };
+
+    const currencySelect = document.getElementById('currency-select');
+    const billingToggle = document.getElementById('billing-toggle');
+    const billingLabels = {
+        monthly: document.getElementById('label-monthly'),
+        yearly: document.getElementById('label-yearly')
+    };
+
+    // Pre-select DOM target nodes to isolate updates and avoid page search reflows
+    const priceElements = {
+        starter: {
+            amount: document.getElementById('price-starter'),
+            currency: document.getElementById('currency-starter'),
+            subtext: document.getElementById('subtext-starter')
+        },
+        pro: {
+            amount: document.getElementById('price-pro'),
+            currency: document.getElementById('currency-pro'),
+            subtext: document.getElementById('subtext-pro')
+        },
+        enterprise: {
+            amount: document.getElementById('price-enterprise'),
+            currency: document.getElementById('currency-enterprise'),
+            subtext: document.getElementById('subtext-enterprise')
+        }
+    };
+
+    const updatePricing = () => {
+        const selectedCurrency = currencySelect.value || 'USD';
+        const isAnnual = billingToggle.getAttribute('aria-checked') === 'true';
+        const currencyConfig = PRICING_MATRIX[selectedCurrency];
+
+        // 1. Calculate values and mutate only the specific leaf DOM text nodes
+        Object.keys(TIER_BASE_RATES).forEach(tier => {
+            const baseRate = TIER_BASE_RATES[tier];
+            const rateMultiplier = currencyConfig.rate;
+            const currencySymbol = currencyConfig.symbol;
+            
+            let finalPrice;
+            let subtextString;
+
+            if (isAnnual) {
+                // Apply flat 20% annual discount multiplier on the monthly rate
+                const monthlyRateWithDiscount = baseRate * 0.8;
+                finalPrice = Math.round(monthlyRateWithDiscount * rateMultiplier);
+                
+                const totalYearlyCost = Math.round(baseRate * 12 * 0.8 * rateMultiplier);
+                subtextString = `Billed annually (${currencySymbol}${totalYearlyCost}/yr)`;
+            } else {
+                finalPrice = Math.round(baseRate * rateMultiplier);
+                subtextString = 'Billed monthly';
+            }
+
+            // 2. Perform isolated DOM leaf element mutations (guarantees zero component reflow)
+            const elements = priceElements[tier];
+            if (elements) {
+                if (elements.currency.textContent !== currencySymbol) {
+                    elements.currency.textContent = currencySymbol;
+                }
+                if (elements.amount.textContent !== String(finalPrice)) {
+                    elements.amount.textContent = finalPrice;
+                }
+                if (elements.subtext.textContent !== subtextString) {
+                    elements.subtext.textContent = subtextString;
+                }
+            }
+        });
+
+        // 3. Highlight active billing cycle label
+        if (isAnnual) {
+            billingLabels.yearly?.classList.add('active');
+            billingLabels.monthly?.classList.remove('active');
+        } else {
+            billingLabels.monthly?.classList.add('active');
+            billingLabels.yearly?.classList.remove('active');
+        }
+    };
+
+    // Currency Switcher change listener
+    if (currencySelect) {
+        currencySelect.addEventListener('change', updatePricing);
+    }
+
+    // Billing Toggle click listener
+    if (billingToggle) {
+        billingToggle.addEventListener('click', () => {
+            const isChecked = billingToggle.getAttribute('aria-checked') === 'true';
+            billingToggle.setAttribute('aria-checked', !isChecked);
+            updatePricing();
+        });
+    }
+
+    // Initialize pricing values on load
+    updatePricing();
+
+
+    // ----------------------------------------------------------------------
+    // 3. BENTO-TO-ACCORDION WRAPPER & CONTEXT LOCK (Feature 2)
+    // ----------------------------------------------------------------------
+    let activeBentoIndex = 0; // State variable tracking currently active bento/accordion card
+    const bentoCards = document.querySelectorAll('.bento-card');
+    const mobileBreakpoint = 768;
+    let isMobileView = window.innerWidth <= mobileBreakpoint;
+
+    // Desktop hover state listener
+    const initDesktopBentoHover = () => {
+        bentoCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                if (window.innerWidth > mobileBreakpoint) {
+                    const index = parseInt(card.dataset.index, 10);
+                    setActiveIndex(index);
+                }
+            });
+        });
+    };
+
+    // Mobile Accordion click listener
+    const initMobileAccordionClick = () => {
+        bentoCards.forEach(card => {
+            const header = card.querySelector('.card-header');
+            if (header) {
+                header.addEventListener('click', (e) => {
+                    if (window.innerWidth <= mobileBreakpoint) {
+                        const index = parseInt(card.dataset.index, 10);
+                        const isCurrentlyActive = card.classList.contains('active');
+                        
+                        // Toggle Accordion expansion: if tap active, collapse it. Otherwise expand clicked.
+                        if (isCurrentlyActive) {
+                            card.classList.remove('active');
+                        } else {
+                            setActiveIndex(index);
+                        }
+                    }
+                });
+            }
+        });
+    };
+
+    // Helper function to update active class on cards cleanly
+    const setActiveIndex = (index) => {
+        activeBentoIndex = index;
+        bentoCards.forEach(card => {
+            const cardIndex = parseInt(card.dataset.index, 10);
+            if (cardIndex === index) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+        });
+    };
+
+    // Responsive State Context Lock Handler
+    const handleResize = () => {
+        const currentIsMobile = window.innerWidth <= mobileBreakpoint;
+        
+        // Check if layout crossed the mobile breakpoint threshold
+        if (currentIsMobile !== isMobileView) {
+            isMobileView = currentIsMobile;
+
+            if (isMobileView) {
+                // Transitioning Desktop -> Mobile: Transfer bento index to expand accordion panel
+                setActiveIndex(activeBentoIndex);
+                
+                // Smoothly scroll the activated accordion panel into view
+                const activeCard = document.querySelector(`.bento-card[data-index="${activeBentoIndex}"]`);
+                if (activeCard) {
+                    setTimeout(() => {
+                        activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                }
+            } else {
+                // Transitioning Mobile -> Desktop: Ensure index continues highlighting correctly
+                setActiveIndex(activeBentoIndex);
+            }
+        }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Initialize Features Event Listeners
+    initDesktopBentoHover();
+    initMobileAccordionClick();
+
+
+    // ----------------------------------------------------------------------
+    // 4. TESTIMONIALS CAROUSEL
+    // ----------------------------------------------------------------------
+    const testimonials = [
+        {
+            quote: "Deploying AetherFlow cut our data pipeline setup from days to literal minutes. The multi-currency dynamic calculations and state replication models just work out-of-the-box.",
+            author: "Alex Cristache",
+            title: "Principal Cloud Architect, DeepMind Systems"
+        },
+        {
+            quote: "I've never seen transitions this fluid in native CSS before. The bento layout refactoring to accordion on responsive resizes is a masterclass in UX design.",
+            author: "Nisha Rao",
+            title: "VP of Product Engineering, Synthesis Labs"
+        },
+        {
+            quote: "AetherFlow's isolated DOM text updates make performance debugging a thing of the past. Under performance profiling, it logs flatline layout times. Insane.",
+            author: "Marcus Chen",
+            title: "Technical Architect, Apex Data"
+        }
+    ];
+
+    let currentTestimonialIndex = 0;
+    const prevBtn = document.getElementById('carousel-prev');
+    const nextBtn = document.getElementById('carousel-next');
+    const quoteEl = document.querySelector('.testimonial-quote');
+    const authorNameEl = document.querySelector('.author-name');
+    const authorTitleEl = document.querySelector('.author-title');
+
+    const updateTestimonial = (index) => {
+        if (!quoteEl || !authorNameEl || !authorTitleEl) return;
+        
+        const data = testimonials[index];
+        // Fade out transition using opacity animation
+        const card = document.querySelector('.testimonial-card');
+        if (card) {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(5px)';
+            
+            setTimeout(() => {
+                quoteEl.textContent = `"${data.quote}"`;
+                authorNameEl.textContent = data.author;
+                authorTitleEl.textContent = data.title;
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 200);
+        }
+    };
+
+    if (prevBtn && nextBtn) {
+        prevBtn.addEventListener('click', () => {
+            currentTestimonialIndex = (currentTestimonialIndex - 1 + testimonials.length) % testimonials.length;
+            updateTestimonial(currentTestimonialIndex);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
+            updateTestimonial(currentTestimonialIndex);
+        });
+    }
+
+
+    // ----------------------------------------------------------------------
+    // 5. SCROLL TO TOP & SCROLL INTERACTION
+    // ----------------------------------------------------------------------
+    const scrollTopBtn = document.getElementById('scroll-top');
+    const navbar = document.getElementById('navbar');
+
+    window.addEventListener('scroll', () => {
+        // Toggle Scroll to Top button visibility
+        if (window.scrollY > 300) {
+            scrollTopBtn?.classList.add('visible');
+        } else {
+            scrollTopBtn?.classList.remove('visible');
+        }
+
+        // Add scrolled background glassmorphism effect to navbar
+        if (window.scrollY > 50) {
+            navbar?.classList.add('scrolled');
+        } else {
+            navbar?.classList.remove('scrolled');
+        }
+    });
+
+    if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+
+    // ----------------------------------------------------------------------
+    // 6. THREE.JS / CANVAS NEURAL NET BACKDROP
+    // ----------------------------------------------------------------------
+    const canvasContainer = document.getElementById('threejs-canvas-container');
+    
+    // Check if Three.js is loaded successfully, otherwise invoke custom Canvas2D Plexus fallback
+    if (typeof THREE !== 'undefined' && canvasContainer) {
+        initThreeJSPlexus(canvasContainer);
+    } else if (canvasContainer) {
+        initCanvas2DPlexus(canvasContainer);
+    }
+
+    function initThreeJSPlexus(container) {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        // Scene & Camera
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+        camera.position.z = 80;
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // Particle system definition
+        const particleCount = 70;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const velocities = [];
+
+        // Distribute nodes randomly in coordinates
+        for (let i = 0; i < particleCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 120; // x
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 80; // y
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 40; // z
+
+            velocities.push({
+                x: (Math.random() - 0.5) * 0.08,
+                y: (Math.random() - 0.5) * 0.08,
+                z: (Math.random() - 0.5) * 0.04
+            });
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        // Create Particle Material (Accent primary Forsythia color)
+        const particleMaterial = new THREE.PointsMaterial({
+            color: 0xFFC801, // Forsythia #FFC801
+            size: 1.5,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particleSystem = new THREE.Points(geometry, particleMaterial);
+        scene.add(particleSystem);
+
+        // Line Connections structure (dynamic drawing between close nodes)
+        const maxConnections = particleCount * 5;
+        const lineGeometry = new THREE.BufferGeometry();
+        const linePositions = new Float32Array(maxConnections * 2 * 3);
+        const lineColors = new Float32Array(maxConnections * 2 * 3);
+
+        lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+        lineGeometry.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
+
+        const lineMaterial = new THREE.LineBasicMaterial({
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.15,
+            blending: THREE.AdditiveBlending
+        });
+
+        const lineMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
+        scene.add(lineMesh);
+
+        // Interaction state
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
+            mouseY = -(e.clientY / window.innerHeight - 0.5) * 20;
+        });
+
+        // Animation Loop
+        const animate = () => {
+            requestAnimationFrame(animate);
+
+            const posArr = geometry.attributes.position.array;
+            let lineIdx = 0;
+            const linePosArr = lineGeometry.attributes.position.array;
+            const lineColArr = lineGeometry.attributes.color.array;
+
+            // Move particles and respect box limits
+            for (let i = 0; i < particleCount; i++) {
+                posArr[i * 3] += velocities[i].x;
+                posArr[i * 3 + 1] += velocities[i].y;
+                posArr[i * 3 + 2] += velocities[i].z;
+
+                // Bounce boundaries
+                if (Math.abs(posArr[i * 3]) > 70) velocities[i].x *= -1;
+                if (Math.abs(posArr[i * 3 + 1]) > 50) velocities[i].y *= -1;
+                if (Math.abs(posArr[i * 3 + 2]) > 30) velocities[i].z *= -1;
+
+                // Line connection logic
+                for (let j = i + 1; j < particleCount; j++) {
+                    const dx = posArr[i * 3] - posArr[j * 3];
+                    const dy = posArr[i * 3 + 1] - posArr[j * 3 + 1];
+                    const dz = posArr[i * 3 + 2] - posArr[j * 3 + 2];
+                    const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+
+                    if (dist < 22 && lineIdx < maxConnections) {
+                        // Set start point
+                        linePosArr[lineIdx * 6] = posArr[i * 3];
+                        linePosArr[lineIdx * 6 + 1] = posArr[i * 3 + 1];
+                        linePosArr[lineIdx * 6 + 2] = posArr[i * 3 + 2];
+                        
+                        // Set end point
+                        linePosArr[lineIdx * 6 + 3] = posArr[j * 3];
+                        linePosArr[lineIdx * 6 + 4] = posArr[j * 3 + 1];
+                        linePosArr[lineIdx * 6 + 5] = posArr[j * 3 + 2];
+
+                        // Gradient lines: transition from Forsythia to Saffron based on depth
+                        const alpha = 1 - (dist / 22);
+                        const r = 1.0;
+                        const g = 0.78 + (0.22 * alpha);
+                        const b = 0.0 + (0.2 * alpha);
+
+                        lineColArr[lineIdx * 6] = r * alpha;
+                        lineColArr[lineIdx * 6 + 1] = g * alpha;
+                        lineColArr[lineIdx * 6 + 2] = b * alpha;
+                        
+                        lineColArr[lineIdx * 6 + 3] = r * alpha;
+                        lineColArr[lineIdx * 6 + 4] = g * alpha;
+                        lineColArr[lineIdx * 6 + 5] = b * alpha;
+
+                        lineIdx++;
+                    }
+                }
+            }
+
+            // Clear remaining line vertices
+            for (let k = lineIdx; k < maxConnections; k++) {
+                linePosArr[k * 6] = 0;
+                linePosArr[k * 6 + 1] = 0;
+                linePosArr[k * 6 + 2] = 0;
+                linePosArr[k * 6 + 3] = 0;
+                linePosArr[k * 6 + 4] = 0;
+                linePosArr[k * 6 + 5] = 0;
+            }
+
+            geometry.attributes.position.needsUpdate = true;
+            lineGeometry.attributes.position.needsUpdate = true;
+            lineGeometry.attributes.color.needsUpdate = true;
+
+            // Camera hover effect
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (mouseY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        };
+
+        animate();
+
+        // Canvas element resizing listener
+        window.addEventListener('resize', () => {
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        });
+    }
+
+    // Fallback Canvas 2D Plexus rendering if ThreeJS fails to initialize
+    function initCanvas2DPlexus(container) {
+        const canvas = document.createElement('canvas');
+        container.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = container.clientWidth;
+        let height = canvas.height = container.clientHeight;
+
+        const points = [];
+        const maxPoints = 50;
+
+        for (let i = 0; i < maxPoints; i++) {
+            points.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.6,
+                vy: (Math.random() - 0.5) * 0.6,
+                radius: Math.random() * 1.5 + 1
+            });
+        }
+
+        const animate2D = () => {
+            requestAnimationFrame(animate2D);
+            ctx.clearRect(0, 0, width, height);
+
+            points.forEach((p, idx) => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > width) p.vx *= -1;
+                if (p.y < 0 || p.y > height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFC801';
+                ctx.fill();
+
+                // Draw connecting lines
+                for (let j = idx + 1; j < points.length; j++) {
+                    const p2 = points[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+
+                    if (dist < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(255, 153, 50, ${0.15 * (1 - dist / 100)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            });
+        };
+
+        animate2D();
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = container.clientWidth;
+            height = canvas.height = container.clientHeight;
+        });
+    }
+});

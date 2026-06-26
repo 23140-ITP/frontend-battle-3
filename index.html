@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AetherFlow - Autonomous Next-Gen AI Data Platform</title>
+    <meta name="description" content="AetherFlow is a premium, high-converting, autonomous AI-driven data automation platform. Streamline pipelines, optimize SEO query structures, and sync databases globally in real-time.">
+    <meta name="keywords" content="AI data automation, real-time analytics, workflow engine, autonomous database, next-gen SaaS">
+    <meta name="author" content="AetherFlow Team">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="AetherFlow - Autonomous Next-Gen AI Data Platform">
+    <meta property="og:description" content="Experience sub-millisecond AI-driven data pipelining. Build, transform, and sync your data streams globally.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aetherflow.io">
+    <meta property="og:image" content="https://aetherflow.io/assets/og-image.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+</head>
+<body>
+    <!-- Top Announcement Banner -->
+    <div class="announcement-banner" id="banner">
+        <div class="banner-content">
+            <span class="badge badge-yellow">SPECIAL ACCELERATION</span>
+            <p>Phase 3.0 speed run active: <strong>20% discount</strong> on all annual plans. Time remaining:</p>
+            <div class="countdown-timer" id="countdown">03h 00m 00s</div>
+        </div>
+        <button class="banner-close" id="close-banner" aria-label="Close Announcement">
+            <!-- x-mark.svg -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="svg-icon"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" aria-label="AetherFlow Home">
+                <span class="logo-accent">Aether</span>Flow
+            </a>
+            
+            <nav class="nav-links" id="nav-menu" aria-label="Main Navigation">
+                <a href="#features" class="nav-item">Features</a>
+                <a href="#integration" class="nav-item">Integrations</a>
+                <a href="#pricing" class="nav-item">Pricing</a>
+                <a href="#faq" class="nav-item">FAQ</a>
+            </nav>
+
+            <div class="nav-actions">
+                <!-- Search wrapper -->
+                <div class="search-bar">
+                    <button class="search-btn" aria-label="Search site">
+                        <!-- search.svg -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="svg-icon"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33l-1.42 1.42l-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>
+                    </button>
+                    <input type="text" placeholder="Search docs..." aria-label="Search documentation" class="search-input">
+                </div>
+
+                <a href="#integration" class="nav-link-docs" aria-label="View API docs">
+                    <span>API Docs</span>
+                    <!-- link.svg -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/></svg>
+                </a>
+                
+                <a href="#pricing" class="btn btn-primary">Deploy Free</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section" id="hero" aria-label="Hero Section">
+            <div id="threejs-canvas-container" class="canvas-container"></div>
+            
+            <div class="hero-wrapper">
+                <div class="hero-tag">
+                    <span class="tag-icon">
+                        <!-- cube-16-solid.svg -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="svg-icon"><path d="M8.372 1.349a.75.75 0 0 0-.744 0l-4.81 2.748L8 7.131l5.182-3.034zM14 5.357L8.75 8.43v6.005l4.872-2.784A.75.75 0 0 0 14 11zm-6.75 9.078V8.43L2 5.357V11c0 .27.144.518.378.651z"/></svg>
+                    </span>
+                    <span class="tag-text">Autonomous Data Processing</span>
+                    <span class="tag-metric">
+                        <!-- arrow-trending-up.svg -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 0 1 5.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg>
+                        340% Velocity
+                    </span>
+                </div>
+
+                <h1 class="hero-title">
+                    The Next-Gen AI Platform <br>
+                    <span class="text-gradient">For Autonomous Pipelines</span>
+                </h1>
+
+                <p class="hero-subtitle">
+                    AetherFlow automates structural layout logic, ingests millions of events, and syncs multi-dimensional pricing matrices globally in real-time. No manual config. No downtime.
+                </p>
+
+                <div class="hero-ctas">
+                    <a href="#pricing" class="btn btn-primary btn-large">Start Free Trial</a>
+                    <a href="#features" class="btn btn-secondary btn-large">Explore Live Features</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Proof Ticker -->
+        <section class="social-proof-ticker" aria-label="Client testimonials and logos">
+            <div class="ticker-heading">TRUSTED BY AUTONOMOUS ORCHESTRATION TEAMS</div>
+            <div class="ticker-wrapper">
+                <div class="ticker-track">
+                    <span class="ticker-item">DEEPMIND SYSTEM</span>
+                    <span class="ticker-item">SYNTHESIS LABS</span>
+                    <span class="ticker-item">NEXUS CORE</span>
+                    <span class="ticker-item">QUANTUM FLOW</span>
+                    <span class="ticker-item">VECTOR ONE</span>
+                    <span class="ticker-item">APEX DATA</span>
+                    <!-- duplicate for seamless infinite loop -->
+                    <span class="ticker-item">DEEPMIND SYSTEM</span>
+                    <span class="ticker-item">SYNTHESIS LABS</span>
+                    <span class="ticker-item">NEXUS CORE</span>
+                    <span class="ticker-item">QUANTUM FLOW</span>
+                    <span class="ticker-item">VECTOR ONE</span>
+                    <span class="ticker-item">APEX DATA</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Bento / Accordion Section -->
+        <section class="features-section" id="features">
+            <div class="section-header">
+                <span class="section-badge">CORE CAPABILITIES</span>
+                <h2 class="section-title">Built for Performance. Orchestrated by AI.</h2>
+                <p class="section-subtitle">
+                    A responsive grid featuring custom transitions, state transfers, and zero third-party dependencies. Hover desktop nodes or tap mobile headers to expand.
+                </p>
+            </div>
+
+            <!-- Bento-to-Accordion Wrapper -->
+            <div class="bento-accordion-wrapper" id="bento-accordion">
+                <!-- Node 0 -->
+                <div class="bento-card active" data-index="0">
+                    <div class="card-header">
+                        <div class="card-title-icon">
+                            <span class="card-icon-box box-mint">
+                                <!-- chart-pie.svg -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z"/><path d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z"/></svg>
+                            </span>
+                            <h3 class="card-title">Real-Time Data Analytics</h3>
+                        </div>
+                        <span class="accordion-arrow" aria-hidden="true">
+                            <!-- chevron-down.svg -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="m19.5 8.25l-7.5 7.5l-7.5-7.5"/></svg>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-description">
+                            Process millions of incoming streaming metrics with sub-millisecond latencies. Experience dynamic live dashboard feeds without component layout reflows.
+                        </p>
+                        <div class="card-visual visual-analytics">
+                            <div class="bar-chart">
+                                <div class="bar" style="--val: 40%"></div>
+                                <div class="bar" style="--val: 70%"></div>
+                                <div class="bar" style="--val: 90%"></div>
+                                <div class="bar" style="--val: 60%"></div>
+                                <div class="bar animate-bar" style="--val: 95%"></div>
+                            </div>
+                            <span class="visual-label">Incoming Streams: Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 1 -->
+                <div class="bento-card" data-index="1">
+                    <div class="card-header">
+                        <div class="card-title-icon">
+                            <span class="card-icon-box box-saffron">
+                                <!-- cog-8-tooth.svg -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11-.94l.149.894c.07.424.384.764.78.93c.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204c.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78c-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107c-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93c-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204c-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78c.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107c.397-.165.71-.505.78-.929l.15-.894Z"/><path d="M15 12a3 3 0 1 1-6 0a3 3 0 0 1 6 0Z"/></svg>
+                            </span>
+                            <h3 class="card-title">Autonomous Neural Engine</h3>
+                        </div>
+                        <span class="accordion-arrow" aria-hidden="true">
+                            <!-- chevron-down.svg -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="m19.5 8.25l-7.5 7.5l-7.5-7.5"/></svg>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-description">
+                            Our proprietary neural core analyzes incoming schema and creates data models on the fly. Automate transformations without continuous dev intervention.
+                        </p>
+                        <div class="card-visual visual-neural">
+                            <div class="neural-nodes">
+                                <div class="node pulse"></div>
+                                <div class="node-line"></div>
+                                <div class="node"></div>
+                                <div class="node-line"></div>
+                                <div class="node pulse"></div>
+                            </div>
+                            <span class="visual-label">Optimization accuracy: 99.8%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 2 -->
+                <div class="bento-card" data-index="2">
+                    <div class="card-header">
+                        <div class="card-title-icon">
+                            <span class="card-icon-box box-powder">
+                                <!-- link-solid.svg -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="M19.902 4.098a3.75 3.75 0 0 0-5.304 0l-4.5 4.5a3.75 3.75 0 0 0 1.035 6.037a.75.75 0 0 1-.646 1.353a5.25 5.25 0 0 1-1.449-8.45l4.5-4.5a5.25 5.25 0 1 1 7.424 7.424l-1.757 1.757a.75.75 0 1 1-1.06-1.06l1.757-1.757a3.75 3.75 0 0 0 0-5.304Zm-7.389 4.267a.75.75 0 0 1 1-.353a5.25 5.25 0 0 1 1.449 8.45l-4.5 4.5a5.25 5.25 0 1 1-7.424-7.424l1.757-1.757a.75.75 0 1 1 1.06 1.06l-1.757 1.757a3.75 3.75 0 1 0 5.304 5.304l4.5-4.5a3.75 3.75 0 0 0-1.035-6.037a.75.75 0 0 1-.354-1Z"/></svg>
+                            </span>
+                            <h3 class="card-title">Live Webhook Syncer</h3>
+                        </div>
+                        <span class="accordion-arrow" aria-hidden="true">
+                            <!-- chevron-down.svg -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="m19.5 8.25l-7.5 7.5l-7.5-7.5"/></svg>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-description">
+                            Streamline communication between your serverless runtimes. Connect to thousands of third-party platforms with robust end-to-end payload encryption.
+                        </p>
+                        <div class="card-visual visual-code">
+                            <pre><code>POST /hooks HTTP/1.1
+Host: api.aetherflow.io
+X-Payload: decrypted_sec</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node 3 -->
+                <div class="bento-card" data-index="3">
+                    <div class="card-header">
+                        <div class="card-title-icon">
+                            <span class="card-icon-box box-nocturnal">
+                                <!-- arrow-path.svg -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+                            </span>
+                            <h3 class="card-title">Global Database Replicator</h3>
+                        </div>
+                        <span class="accordion-arrow" aria-hidden="true">
+                            <!-- chevron-down.svg -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="m19.5 8.25l-7.5 7.5l-7.5-7.5"/></svg>
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-description">
+                            Replicate transactional and analytical databases across multi-regions instantly. Complete conflict-free replication is handled natively at the edge.
+                        </p>
+                        <div class="card-visual visual-replication">
+                            <div class="sync-indicator">
+                                <span class="pulse-dot"></span>
+                                <span class="sync-text">US-EAST ↔ EU-WEST</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resize indicator badge -->
+            <div class="resize-badge">
+                <span class="badge-icon">
+                    <!-- chevron-up-solid.svg -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="svg-icon"><path fill-rule="evenodd" d="M11.47 7.72a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06L12 9.31l-6.97 6.97a.75.75 0 0 1-1.06-1.06l7.5-7.5Z" clip-rule="evenodd"/></svg>
+                </span>
+                <span>Responsive State Link active: Resize viewport under 768px to check accordion transition</span>
+            </div>
+        </section>
+
+        <!-- Webhook Docs & Live Simulator Section -->
+        <section class="integration-section" id="integration">
+            <div class="integration-wrapper">
+                <div class="integration-info">
+                    <span class="section-badge">DEVELOPER API</span>
+                    <h2 class="section-title text-left">Deploy webhooks in 2 lines of code.</h2>
+                    <p class="section-description">
+                        Receive payloads, authenticate request headers, and dispatch responses in milliseconds. Zero setup needed to begin real-time data automation pipeline events.
+                    </p>
+                    
+                    <ul class="features-list">
+                        <li>
+                            <span class="list-icon">
+                                <!-- link-solid.svg -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="svg-icon"><path d="M19.902 4.098a3.75 3.75 0 0 0-5.304 0l-4.5 4.5a3.75 3.75 0 0 0 1.035 6.037a.75.75 0 0 1-.646 1.353a5.25 5.25 0 0 1-1.449-8.45l4.5-4.5a5.25 5.25 0 1 1 7.424 7.424l-1.757 1.757a.75.75 0 1 1-1.06-1.06l1.757-1.757a3.75 3.75 0 0 0 0-5.304Zm-7.389 4.267a.75.75 0 0 1 1-.353a5.25 5.25 0 0 1 1.449 8.45l-4.5 4.5a5.25 5.25 0 1 1-7.424-7.424l1.757-1.757a.75.75 0 1 1 1.06 1.06l-1.757 1.757a3.75 3.75 0 1 0 5.304 5.304l4.5-4.5a3.75 3.75 0 0 0-1.035-6.037a.75.75 0 0 1-.354-1Z"/></svg>
+                            </span>
+                            <span>Secure payload signing via SHA256 HMAC</span>
+                        </li>
+                        <li>
+                            <span class="list-icon">
+                                <!-- arrow-path.svg -->
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="svg-icon"><path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+                            </span>
+                            <span>Auto-retry queues with exponential backoff</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="integration-simulator">
+                    <div class="terminal-header">
+                        <span class="dot-red"></span>
+                        <span class="dot-yellow"></span>
+                        <span class="dot-green"></span>
+                        <span class="terminal-title">webhook-deploy.js</span>
+                    </div>
+                    <div class="terminal-body">
+                        <pre><code><span class="code-comment">// Initialize webhook endpoint</span>
+<span class="code-keyword">const</span> flow = <span class="code-keyword">new</span> AetherFlow(<span class="code-string">"ae_live_83k"</span>);
+
+flow.on(<span class="code-string">"event.received"</span>, <span class="code-keyword">async</span> (payload) => {
+  console.log(<span class="code-string">"Processing raw payload"</span>, payload.id);
+  <span class="code-keyword">await</span> flow.sync(payload.data);
+});
+
+<span class="code-comment">// Active on deployment...</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section with Currency Switcher -->
+        <section class="pricing-section" id="pricing">
+            <div class="section-header">
+                <span class="section-badge">PRICING TABLES</span>
+                <h2 class="section-title">Matrix-Driven Rates. Performance Isolated.</h2>
+                <p class="section-subtitle">
+                    Dynamically computed base rates, 20% annual discounts, and exchange tariffs. Switching currency modifies text nodes directly to avoid parent re-renders.
+                </p>
+            </div>
+
+            <!-- Controls Panel -->
+            <div class="pricing-controls">
+                <!-- Currency Selector Dropdown -->
+                <div class="currency-dropdown-wrapper">
+                    <label for="currency-select" class="sr-only">Choose Currency</label>
+                    <select id="currency-select" class="currency-select" aria-label="Select Currency">
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="INR">INR (₹)</option>
+                    </select>
+                    <span class="dropdown-chevron" aria-hidden="true">
+                        <!-- chevron-down.svg -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="svg-icon"><path d="m19.5 8.25l-7.5 7.5l-7.5-7.5"/></svg>
+                    </span>
+                </div>
+
+                <!-- Billing Cycle Toggle -->
+                <div class="billing-toggle-wrapper">
+                    <span class="toggle-label" id="label-monthly">Monthly</span>
+                    <button class="toggle-switch" id="billing-toggle" role="switch" aria-checked="false" aria-label="Toggle Billing Period">
+                        <span class="toggle-handle"></span>
+                    </button>
+                    <span class="toggle-label" id="label-yearly">Yearly <span class="discount-badge">Save 20%</span></span>
+                </div>
+            </div>
+
+            <!-- Pricing Grid -->
+            <div class="pricing-grid">
+                <!-- Tier 1: Starter -->
+                <div class="pricing-card" data-tier="starter">
+                    <div class="pricing-header">
+                        <h3 class="tier-name">Starter</h3>
+                        <p class="tier-tagline">Perfect for developers and small speed runs.</p>
+                        <div class="price-container">
+                            <span class="price-currency" id="currency-starter">$</span>
+                            <span class="price-amount" id="price-starter">29</span>
+                            <span class="price-period" id="period-starter">/mo</span>
+                        </div>
+                        <p class="price-subtext" id="subtext-starter">Billed monthly</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>1,000 automated runs/mo</li>
+                        <li>Standard neural node logs</li>
+                        <li>1 webhook sync endpoint</li>
+                        <li class="muted">No replication nodes</li>
+                    </ul>
+                    <div class="pricing-footer">
+                        <button class="btn btn-secondary btn-full">Select Starter</button>
+                    </div>
+                </div>
+
+                <!-- Tier 2: Pro (Featured) -->
+                <div class="pricing-card featured" data-tier="pro">
+                    <div class="pricing-featured-badge">MOST POPULAR</div>
+                    <div class="pricing-header">
+                        <h3 class="tier-name">Pro</h3>
+                        <p class="tier-tagline">Ideal for growing AI workflow teams.</p>
+                        <div class="price-container">
+                            <span class="price-currency" id="currency-pro">$</span>
+                            <span class="price-amount" id="price-pro">99</span>
+                            <span class="price-period" id="period-pro">/mo</span>
+                        </div>
+                        <p class="price-subtext" id="subtext-pro">Billed monthly</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>10,000 automated runs/mo</li>
+                        <li>Advanced Neural schema logs</li>
+                        <li>10 webhook sync endpoints</li>
+                        <li>1 Region database replicator</li>
+                    </ul>
+                    <div class="pricing-footer">
+                        <button class="btn btn-primary btn-full">Get Pro Acceleration</button>
+                    </div>
+                </div>
+
+                <!-- Tier 3: Enterprise -->
+                <div class="pricing-card" data-tier="enterprise">
+                    <div class="pricing-header">
+                        <h3 class="tier-name">Enterprise</h3>
+                        <p class="tier-tagline">Custom models for large automation loads.</p>
+                        <div class="price-container">
+                            <span class="price-currency" id="currency-enterprise">$</span>
+                            <span class="price-amount" id="price-enterprise">249</span>
+                            <span class="price-period" id="period-enterprise">/mo</span>
+                        </div>
+                        <p class="price-subtext" id="subtext-enterprise">Billed monthly</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Unlimited automated runs/mo</li>
+                        <li>Custom training parameters</li>
+                        <li>Unlimited webhook endpoints</li>
+                        <li>Multi-region replicator nodes</li>
+                    </ul>
+                    <div class="pricing-footer">
+                        <button class="btn btn-secondary btn-full">Contact Sales</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <div class="section-header">
+                <span class="section-badge">USER LOVE</span>
+                <h2 class="section-title">What engineers say under pressure</h2>
+            </div>
+            
+            <div class="carousel-container">
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">
+                        "Deploying AetherFlow cut our data pipeline setup from days to literal minutes. The multi-currency dynamic calculations and state replication models just work out-of-the-box."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-details">
+                            <span class="author-name">Alex Cristache</span>
+                            <span class="author-title">Principal Cloud Architect, DeepMind Systems</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-controls">
+                    <button class="carousel-btn" id="carousel-prev" aria-label="Previous Testimonial">
+                        <!-- chevron-left.svg -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+                    </button>
+                    <button class="carousel-btn" id="carousel-next" aria-label="Next Testimonial">
+                        <!-- chevron-right.svg -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="m8.25 4.5l7.5 7.5l-7.5 7.5"/></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section" id="faq">
+            <div class="section-header">
+                <span class="section-badge">HACKATHON SPECS</span>
+                <h2 class="section-title">Frequently Asked Questions</h2>
+            </div>
+
+            <div class="faq-accordion-list">
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        <span>How does AetherFlow prevent layout reflows on pricing adjustments?</span>
+                        <span class="faq-toggle">
+                            <!-- chevron-up.svg -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="m4.5 15.75l7.5-7.5l7.5 7.5"/></svg>
+                        </span>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>We modify only the inner text node parameters using direct DOM references (<code>document.getElementById</code> text updates) rather than invoking general framework components. This isolates DOM mutations to precise leaf nodes, preventing layout thrashing.</p>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        <span>Is the Bento-to-Accordion state linked bidirectionally?</span>
+                        <span class="faq-toggle">
+                            <!-- chevron-up.svg -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="m4.5 15.75l7.5-7.5l7.5 7.5"/></svg>
+                        </span>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>Yes. When users interact with a specific feature index on desktop (hovering over bento nodes), it updates an internal state variable. If the screen is resized under 768px, that exact index is synced, automatically opening the corresponding accordion panel.</p>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        <span>Can I deploy this to Vercel, Netlify, or Github Pages?</span>
+                        <span class="faq-toggle">
+                            <!-- chevron-up.svg -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" class="svg-icon"><path d="m4.5 15.75l7.5-7.5l7.5 7.5"/></svg>
+                        </span>
+                    </summary>
+                    <div class="faq-answer">
+                        <p>Absolutely. Because the page is built using zero-dependency semantic HTML and Vanilla CSS/JS, it has a build time of 0ms and can be deployed to any static cloud hosting platform instantly.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="#" class="footer-logo"><span class="logo-accent">Aether</span>Flow</a>
+                <p class="footer-tagline">Autonomous Next-Gen AI Data Platform speed run. Engineered for Frontend Battle 3.0.</p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Platform</h4>
+                    <a href="#features">Features</a>
+                    <a href="#integration">Webhooks</a>
+                    <a href="#pricing">Pricing</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Legals</h4>
+                    <a href="#">Security</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 AetherFlow. Designed for IIT Bhubaneswar VibeCoding Competition.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top-btn" id="scroll-top" aria-label="Scroll to top">
+        <!-- chevron-up-solid.svg -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="svg-icon"><path fill-rule="evenodd" d="M11.47 7.72a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06L12 9.31l-6.97 6.97a.75.75 0 0 1-1.06-1.06l7.5-7.5Z" clip-rule="evenodd"/></svg></button>
+
+    <script src="main.js" defer></script>
+</body>
+</html>

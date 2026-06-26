@@ -156,6 +156,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const animatePrice = (element, start, end, duration) => {
+        if (start === end) {
+            element.textContent = end;
+            return;
+        }
+        const startTime = performance.now();
+        const animate = (now) => {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = progress * (2 - progress); // easeOutQuad
+            const currentVal = Math.round(start + (end - start) * ease);
+            element.textContent = currentVal;
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+        requestAnimationFrame(animate);
+    };
+
     const updatePricing = () => {
         const selectedCurrency = currencySelect.value || 'USD';
         const isAnnual = billingToggle.getAttribute('aria-checked') === 'true';
@@ -191,7 +210,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (elements.currency.textContent !== currencySymbol) {
                     elements.currency.textContent = currencySymbol;
                 }
-                if (elements.amount.textContent !== String(finalPrice)) {
+                const currentVal = parseInt(elements.amount.textContent, 10) || 0;
+                if (currentVal !== finalPrice) {
+                    animatePrice(elements.amount, currentVal, finalPrice, 200);
+                } else {
                     elements.amount.textContent = finalPrice;
                 }
                 if (elements.subtext.textContent !== subtextString) {
@@ -248,6 +270,63 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // Helper function for custom WAAPI mobile accordion heights
+    const animateAccordion = (cardBody, open, duration = 350) => {
+        if (!cardBody) return;
+
+        // Cancel any active animation
+        if (cardBody.activeAnimation) {
+            cardBody.activeAnimation.cancel();
+        }
+
+        const startHeight = open ? 0 : cardBody.scrollHeight;
+        const endHeight = open ? cardBody.scrollHeight : 0;
+        const startOpacity = open ? 0 : 1;
+        const endOpacity = open ? 1 : 0;
+        const startTransform = open ? 'translateY(-10px)' : 'translateY(0)';
+        const endTransform = open ? 'translateY(0)' : 'translateY(-10px)';
+
+        // Temporarily override the CSS transitions so they do not conflict
+        cardBody.style.transition = 'none';
+
+        // Pre-set margin/gap for correct scrollHeight layout computation
+        if (open) {
+            cardBody.style.marginTop = '1rem';
+            cardBody.style.gap = '1rem';
+        }
+
+        // Trigger layout reflow
+        cardBody.offsetHeight;
+
+        const animation = cardBody.animate([
+            { height: `${startHeight}px`, opacity: startOpacity, transform: startTransform },
+            { height: `${endHeight}px`, opacity: endOpacity, transform: endTransform }
+        ], {
+            duration: duration,
+            easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+            fill: 'forwards'
+        });
+
+        cardBody.activeAnimation = animation;
+
+        animation.onfinish = () => {
+            cardBody.activeAnimation = null;
+            // Restore CSS transition
+            cardBody.style.transition = '';
+            
+            // Lock static styling state
+            cardBody.style.height = open ? 'auto' : '0px';
+            cardBody.style.maxHeight = open ? 'none' : '0px';
+            cardBody.style.opacity = open ? '1' : '0';
+            cardBody.style.transform = open ? 'translateY(0)' : 'translateY(-10px)';
+            
+            if (!open) {
+                cardBody.style.marginTop = '0';
+                cardBody.style.gap = '0';
+            }
+        };
+    };
+
     // Mobile Accordion click listener
     const initMobileAccordionClick = () => {
         bentoCards.forEach(card => {
@@ -262,6 +341,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (isCurrentlyActive) {
                             card.classList.remove('active');
                             card.setAttribute('aria-expanded', 'false');
+                            const cardBody = card.querySelector('.card-body');
+                            if (cardBody) {
+                                animateAccordion(cardBody, false);
+                            }
                             activeBentoIndex = -1;
                         } else {
                             setActiveIndex(index);
@@ -277,12 +360,40 @@ document.addEventListener('DOMContentLoaded', () => {
         activeBentoIndex = index;
         bentoCards.forEach(card => {
             const cardIndex = parseInt(card.dataset.index, 10);
-            if (cardIndex === index) {
+            const cardBody = card.querySelector('.card-body');
+            const shouldBeOpen = (cardIndex === index);
+            
+            if (shouldBeOpen) {
                 card.classList.add('active');
                 card.setAttribute('aria-expanded', 'true');
             } else {
                 card.classList.remove('active');
                 card.setAttribute('aria-expanded', 'false');
+            }
+
+            if (cardBody) {
+                if (window.innerWidth <= mobileBreakpoint) {
+                    const isCurrentlyOpen = cardBody.offsetHeight > 0;
+                    if (shouldBeOpen !== isCurrentlyOpen) {
+                        animateAccordion(cardBody, shouldBeOpen);
+                    } else {
+                        // Ensure static alignment
+                        cardBody.style.height = shouldBeOpen ? 'auto' : '0px';
+                        cardBody.style.maxHeight = shouldBeOpen ? 'none' : '0px';
+                        cardBody.style.opacity = shouldBeOpen ? '1' : '0';
+                        cardBody.style.transform = shouldBeOpen ? 'translateY(0)' : 'translateY(-10px)';
+                        cardBody.style.marginTop = shouldBeOpen ? '1rem' : '0';
+                        cardBody.style.gap = shouldBeOpen ? '1rem' : '0';
+                    }
+                } else {
+                    // Desktop view: clear inline styles to allow standard desktop CSS grid layout
+                    cardBody.style.height = '';
+                    cardBody.style.maxHeight = '';
+                    cardBody.style.opacity = '';
+                    cardBody.style.transform = '';
+                    cardBody.style.marginTop = '';
+                    cardBody.style.gap = '';
+                }
             }
         });
     };
@@ -307,9 +418,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 100);
                 }
             } else {
-                // Transitioning Mobile -> Desktop: Ensure index continues highlighting correctly
+                // Transitioning Mobile -> Desktop: Clear inline styles
+                bentoCards.forEach(card => {
+                    const cardBody = card.querySelector('.card-body');
+                    if (cardBody) {
+                        if (cardBody.activeAnimation) {
+                            cardBody.activeAnimation.cancel();
+                            cardBody.activeAnimation = null;
+                        }
+                        cardBody.style.transition = '';
+                        cardBody.style.height = '';
+                        cardBody.style.maxHeight = '';
+                        cardBody.style.opacity = '';
+                        cardBody.style.transform = '';
+                        cardBody.style.marginTop = '';
+                        cardBody.style.gap = '';
+                    }
+                });
                 setActiveIndex(activeBentoIndex);
             }
+        } else if (isMobileView) {
+            // If already mobile, adjust scrollHeight on resize
+            bentoCards.forEach(card => {
+                const cardBody = card.querySelector('.card-body');
+                if (cardBody && card.classList.contains('active')) {
+                    cardBody.style.height = 'auto';
+                    cardBody.style.maxHeight = 'none';
+                }
+            });
         }
     };
 
@@ -330,6 +466,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (isCurrentlyActive) {
                         card.classList.remove('active');
                         card.setAttribute('aria-expanded', 'false');
+                        const cardBody = card.querySelector('.card-body');
+                        if (cardBody) {
+                            animateAccordion(cardBody, false);
+                        }
                         activeBentoIndex = -1;
                     } else {
                         setActiveIndex(index);
@@ -728,5 +868,180 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }, { threshold: 0.4, rootMargin: "-80px 0px -20% 0px" });
         sections.forEach(s => sectionObserver.observe(s));
+    }
+
+    // ----------------------------------------------------------------------
+    // 10. MAGNETIC BUTTON HOVER PHYSICS
+    // ----------------------------------------------------------------------
+    const initMagneticButtons = () => {
+        const buttons = document.querySelectorAll('.btn-primary, .btn-secondary, .btn-terminal-run');
+        
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.style.transition = 'transform 0.1s ease-out';
+            });
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left - rect.width / 2;
+                const mouseY = e.clientY - rect.top - rect.height / 2;
+                
+                const pullForce = 4; // pull up to 4px
+                const x = (mouseX / (rect.width / 2)) * pullForce;
+                const y = (mouseY / (rect.height / 2)) * pullForce;
+                btn.style.transform = `translate(${x}px, ${y}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                // Spring back smoothly
+                btn.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+                btn.style.transform = '';
+                // Restore default CSS transitions after spring animation completes
+                setTimeout(() => {
+                    btn.style.transition = '';
+                }, 300);
+            });
+        });
+    };
+    initMagneticButtons();
+
+    // ----------------------------------------------------------------------
+    // 11. BENTO CARD SPOTLIGHT GLOW
+    // ----------------------------------------------------------------------
+    const initBentoSpotlight = () => {
+        const cards = document.querySelectorAll('.bento-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    };
+    initBentoSpotlight();
+
+    // ----------------------------------------------------------------------
+    // 12. INTERACTIVE TERMINAL SIMULATOR
+    // ----------------------------------------------------------------------
+    const runSimulationBtn = document.getElementById('run-simulation');
+    const logsContainer = document.getElementById('logs-container');
+    const simulatorLogs = document.getElementById('simulator-logs');
+
+    if (runSimulationBtn && logsContainer && simulatorLogs) {
+        let activeTimeouts = [];
+
+        runSimulationBtn.addEventListener('click', () => {
+            // Cancel any running simulation timeouts/resets to allow clean re-triggers
+            activeTimeouts.forEach(clearTimeout);
+            activeTimeouts = [];
+
+            // Disable button during execution
+            runSimulationBtn.disabled = true;
+            runSimulationBtn.textContent = 'Running...';
+
+            // Show logs panel
+            simulatorLogs.style.display = 'block';
+            logsContainer.innerHTML = '';
+
+            const logs = [
+                { text: 'Initializing AetherFlow webhook engine...', type: 'info', delay: 100 },
+                { text: 'EVENT: Incoming POST from API Gateway (source: client_83k)', type: 'event', delay: 500 },
+                { text: 'Validating payload authenticity (HMAC-SHA256)...', type: 'info', delay: 1000 },
+                { text: 'SUCCESS: Signature validated successfully.', type: 'success', delay: 1400 },
+                { text: 'Dispatching payload to multi-region replication queue...', type: 'info', delay: 1900 },
+                { text: 'REPLICATOR: US-EAST -> EU-WEST sync initiated.', type: 'event', delay: 2300 },
+                { text: 'REPLICATOR: Syncing regional cache AP-SOUTH...', type: 'event', delay: 3000 },
+                { text: 'SUCCESS: State synchronized across 3 regions in 42ms.', type: 'success', delay: 4200 },
+                { text: 'Webhook executed successfully. Status 200 OK (total: 104ms).', type: 'success', delay: 4700 }
+            ];
+
+            // Replicators and lines
+            const secondLine = document.querySelectorAll('.replicator-grid .rep-line')[1];
+            const apSouthRegion = document.querySelectorAll('.replicator-grid .rep-region')[2];
+
+            // Clean up any old active styling at start
+            if (secondLine) {
+                secondLine.classList.remove('active');
+                const dot = secondLine.querySelector('.rep-progress-dot');
+                if (dot) dot.remove();
+            }
+            if (apSouthRegion) {
+                apSouthRegion.classList.remove('active');
+            }
+
+            logs.forEach(log => {
+                const timeoutId = setTimeout(() => {
+                    const line = document.createElement('div');
+                    line.className = 'log-line';
+
+                    const timeSpan = document.createElement('span');
+                    timeSpan.className = 'log-time';
+                    const now = new Date();
+                    const pad = (n) => String(n).padStart(2, '0');
+                    timeSpan.textContent = `[${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}]`;
+
+                    const textSpan = document.createElement('span');
+                    textSpan.className = `log-${log.type}`;
+                    textSpan.textContent = log.text;
+
+                    line.appendChild(timeSpan);
+                    line.appendChild(textSpan);
+                    logsContainer.appendChild(line);
+
+                    // Auto-scroll terminal
+                    simulatorLogs.scrollTop = simulatorLogs.scrollHeight;
+
+                    // Trigger replicator visuals dynamically
+                    if (log.text.includes('US-EAST -> EU-WEST')) {
+                        // Reset line 1 dot animation for a fresh animation burst
+                        const firstLineDot = document.querySelector('.replicator-grid .rep-line.active .rep-progress-dot');
+                        if (firstLineDot) {
+                            firstLineDot.style.animation = 'none';
+                            firstLineDot.offsetHeight; // trigger reflow
+                            firstLineDot.style.animation = 'flowDot 1.5s linear infinite';
+                        }
+                    }
+
+                    if (log.text.includes('AP-SOUTH')) {
+                        if (secondLine && apSouthRegion) {
+                            secondLine.classList.add('active');
+                            let dot = secondLine.querySelector('.rep-progress-dot');
+                            if (!dot) {
+                                dot = document.createElement('div');
+                                dot.className = 'rep-progress-dot';
+                                secondLine.appendChild(dot);
+                            }
+                            dot.style.animation = 'none';
+                            dot.offsetHeight; // reflow
+                            dot.style.animation = 'flowDot 1.5s linear infinite';
+
+                            const activeTimeout = setTimeout(() => {
+                                apSouthRegion.classList.add('active');
+                            }, 1000);
+                            activeTimeouts.push(activeTimeout);
+                        }
+                    }
+                }, log.delay);
+
+                activeTimeouts.push(timeoutId);
+            });
+
+            // Re-enable button and reset AP-SOUTH region visual state
+            const completionTimeout = setTimeout(() => {
+                runSimulationBtn.disabled = false;
+                runSimulationBtn.textContent = 'Trigger Event';
+
+                if (secondLine) {
+                    secondLine.classList.remove('active');
+                    const dot = secondLine.querySelector('.rep-progress-dot');
+                    if (dot) dot.remove();
+                }
+                if (apSouthRegion) {
+                    apSouthRegion.classList.remove('active');
+                }
+            }, 6500);
+
+            activeTimeouts.push(completionTimeout);
+        });
     }
 });

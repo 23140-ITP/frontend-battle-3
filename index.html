@@ -387,6 +387,7 @@ var x0=["BN","BN","BN","BN","BN","BN","BN","BN","BN","S","B","S","WS","B","BN","
                         <span class="dot-yellow"></span>
                         <span class="dot-green"></span>
                         <span class="terminal-title">webhook-deploy.js</span>
+                        <button class="btn-terminal-run" id="run-simulation" aria-label="Trigger Webhook Simulation">Trigger Event</button>
                     </div>
                     <div class="terminal-body">
                         <pre><code><span class="code-comment">// Initialize webhook endpoint</span>
@@ -398,6 +399,9 @@ flow.on(<span class="code-string">"event.received"</span>, <span class="code-key
 });
 
 <span class="code-comment">// Active on deployment...</span></code></pre>
+                    </div>
+                    <div class="terminal-logs" id="simulator-logs" style="display: none;">
+                        <div id="logs-container"></div>
                     </div>
                 </div>
             </div>

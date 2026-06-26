@@ -1878,3 +1878,81 @@ a {
         gap: 2rem;
     }
 }
+
+/* ==========================================================================
+   Premium UI/UX Polish & Micro-Interactions
+   ========================================================================== */
+
+/* Bento Card Spotlight Hover Glow */
+.bento-card {
+    position: relative;
+    overflow: hidden;
+}
+.bento-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(350px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(255, 200, 1, 0.05), transparent 80%);
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.4s ease;
+    opacity: 0;
+}
+.bento-card:hover::before {
+    opacity: 1;
+}
+
+/* Terminal Simulator Run Button & Console Logs styling */
+.btn-terminal-run {
+    margin-left: auto;
+    background: rgba(255, 200, 1, 0.1);
+    color: var(--color-accent-primary);
+    border: 1px solid rgba(255, 200, 1, 0.25);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all var(--transition-micro);
+}
+.btn-terminal-run:hover {
+    background: var(--color-accent-primary);
+    color: var(--color-bg-base);
+    border-color: var(--color-accent-primary);
+}
+.btn-terminal-run:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.terminal-logs {
+    background: rgba(0, 0, 0, 0.4);
+    border-top: 1px solid var(--color-hairline);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 1rem 1.5rem;
+    max-height: 180px;
+    overflow-y: auto;
+}
+.log-line {
+    margin-bottom: 6px;
+    opacity: 0;
+    transform: translateY(4px);
+    animation: logFadeIn 0.25s forwards ease-out;
+    line-height: 1.4;
+}
+@keyframes logFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.log-info { color: var(--color-text-muted); }
+.log-success { color: var(--color-accent-primary); }
+.log-event { color: var(--color-accent-secondary); }
+.log-time { color: var(--color-text-subtle); margin-right: 8px; }
+

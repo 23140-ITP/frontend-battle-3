@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create Particle Material (Accent primary Forsythia color)
         const particleMaterial = new THREE.PointsMaterial({
             color: 0xFFC801, // Forsythia #FFC801
-            size: 1.5,
+            size: 1.0,
             transparent: true,
             opacity: 0.8,
             blending: THREE.AdditiveBlending
@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const lineMaterial = new THREE.LineBasicMaterial({
             vertexColors: true,
             transparent: true,
-            opacity: 0.15,
+            opacity: 0.1,
             blending: THREE.AdditiveBlending
         });
 

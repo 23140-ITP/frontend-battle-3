@@ -164,14 +164,21 @@
                             Process millions of incoming streaming metrics with sub-millisecond latencies. Experience dynamic live dashboard feeds without component layout reflows.
                         </p>
                         <div class="card-visual visual-analytics">
-                            <div class="bar-chart">
-                                <div class="bar" style="--val: 40%"></div>
-                                <div class="bar" style="--val: 70%"></div>
-                                <div class="bar" style="--val: 90%"></div>
-                                <div class="bar" style="--val: 60%"></div>
-                                <div class="bar animate-bar" style="--val: 95%"></div>
+                            <div class="analytics-chart-container">
+                                <div class="chart-grid"></div>
+                                <div class="bar-chart">
+                                    <div class="bar" style="--val: 45%"></div>
+                                    <div class="bar" style="--val: 65%"></div>
+                                    <div class="bar" style="--val: 35%"></div>
+                                    <div class="bar" style="--val: 80%"></div>
+                                    <div class="bar" style="--val: 55%"></div>
+                                    <div class="bar animate-bar" style="--val: 95%"></div>
+                                </div>
                             </div>
-                            <span class="visual-label">Incoming Streams: Active</span>
+                            <div class="analytics-meta">
+                                <span class="meta-value">98.4K <span class="meta-label">rps</span></span>
+                                <span class="meta-value">0.8ms <span class="meta-label">latency</span></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -196,14 +203,26 @@
                             Our proprietary neural core analyzes incoming schema and creates data models on the fly. Automate transformations without continuous dev intervention.
                         </p>
                         <div class="card-visual visual-neural">
-                            <div class="neural-nodes">
-                                <div class="node pulse"></div>
-                                <div class="node-line"></div>
-                                <div class="node"></div>
-                                <div class="node-line"></div>
-                                <div class="node pulse"></div>
+                            <div class="neural-graph">
+                                <svg viewBox="0 0 200 60" class="neural-svg">
+                                    <g class="glow-group">
+                                        <line x1="20" y1="30" x2="70" y2="15" stroke="rgba(217, 232, 226, 0.2)" stroke-width="1"/>
+                                        <line x1="20" y1="30" x2="70" y2="45" stroke="rgba(217, 232, 226, 0.2)" stroke-width="1"/>
+                                        <line x1="70" y1="15" x2="130" y2="15" stroke="rgba(255, 200, 1, 0.3)" stroke-dasharray="3 2" stroke-width="1"/>
+                                        <line x1="70" y1="15" x2="130" y2="45" stroke="rgba(255, 153, 50, 0.2)" stroke-width="1"/>
+                                        <line x1="70" y1="45" x2="130" y2="45" stroke="rgba(255, 153, 50, 0.3)" stroke-width="1"/>
+                                        <line x1="130" y1="15" x2="180" y2="30" stroke="rgba(255, 200, 1, 0.4)" stroke-width="1"/>
+                                        <line x1="130" y1="45" x2="180" y2="30" stroke="rgba(255, 200, 1, 0.5)" stroke-width="1"/>
+                                    </g>
+                                    <circle cx="20" cy="30" r="3" fill="#D9E8E2"/>
+                                    <circle cx="70" cy="15" r="3.5" fill="#FFC801"/>
+                                    <circle cx="70" cy="45" r="3.5" fill="#FF9932"/>
+                                    <circle cx="130" cy="15" r="3.5" fill="#FFC801"/>
+                                    <circle cx="130" cy="45" r="3.5" fill="#FF9932"/>
+                                    <circle cx="180" cy="30" r="4.5" fill="#F1F6F4" class="node-pulse-circle"/>
+                                </svg>
                             </div>
-                            <span class="visual-label">Optimization accuracy: 99.8%</span>
+                            <span class="visual-label">Optimization score: 99.8%</span>
                         </div>
                     </div>
                 </div>
@@ -228,9 +247,20 @@
                             Sync data across serverless runtimes. Connect to thousands of third-party platforms with robust payload encryption.
                         </p>
                         <div class="card-visual visual-code">
-                            <pre><code>POST /hooks HTTP/1.1
-Host: api.aetherflow.io
-X-Payload: decrypted_sec</code></pre>
+                            <div class="ide-window">
+                                <div class="ide-header">
+                                    <div class="ide-dots">
+                                        <span class="ide-dot dot-red"></span>
+                                        <span class="ide-dot dot-yellow"></span>
+                                        <span class="ide-dot dot-green"></span>
+                                    </div>
+                                    <span class="ide-filename">sync.js</span>
+                                </div>
+                                <div class="ide-body">
+                                    <pre><code><span class="keyword">const</span> <span class="variable">flow</span> = <span class="keyword">await</span> <span class="function">connect</span>(<span class="string">'ae_hook'</span>);
+<span class="keyword">if</span> (<span class="variable">flow</span>.<span class="property">active</span>) <span class="keyword">await</span> <span class="variable">flow</span>.<span class="function">sync</span>(<span class="string">'prod_db'</span>);</code></pre>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -255,9 +285,23 @@ X-Payload: decrypted_sec</code></pre>
                             Replicate transactional and analytical databases across multi-regions instantly. Complete conflict-free replication is handled natively at the edge.
                         </p>
                         <div class="card-visual visual-replication">
-                            <div class="sync-indicator">
-                                <span class="pulse-dot"></span>
-                                <span class="sync-text">US-EAST ↔ EU-WEST</span>
+                            <div class="replicator-grid">
+                                <div class="rep-region active">
+                                    <span class="rep-dot"></span>
+                                    <span class="rep-name">US-EAST</span>
+                                </div>
+                                <div class="rep-line active">
+                                    <div class="rep-progress-dot"></div>
+                                </div>
+                                <div class="rep-region active">
+                                    <span class="rep-dot"></span>
+                                    <span class="rep-name">EU-WEST</span>
+                                </div>
+                                <div class="rep-line"></div>
+                                <div class="rep-region">
+                                    <span class="rep-dot"></span>
+                                    <span class="rep-name">AP-SOUTH</span>
+                                </div>
                             </div>
                         </div>
                     </div>

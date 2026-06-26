@@ -261,6 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Toggle Accordion expansion: if tap active, collapse it. Otherwise expand clicked.
                         if (isCurrentlyActive) {
                             card.classList.remove('active');
+                            card.setAttribute('aria-expanded', 'false');
                             activeBentoIndex = -1;
                         } else {
                             setActiveIndex(index);
@@ -278,8 +279,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const cardIndex = parseInt(card.dataset.index, 10);
             if (cardIndex === index) {
                 card.classList.add('active');
+                card.setAttribute('aria-expanded', 'true');
             } else {
                 card.classList.remove('active');
+                card.setAttribute('aria-expanded', 'false');
             }
         });
     };
@@ -315,6 +318,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Features Event Listeners
     initDesktopBentoHover();
     initMobileAccordionClick();
+
+    // Keyboard support for Bento grid / Accordion
+    bentoCards.forEach(card => {
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const index = parseInt(card.dataset.index, 10);
+                if (window.innerWidth <= mobileBreakpoint) {
+                    const isCurrentlyActive = card.classList.contains('active');
+                    if (isCurrentlyActive) {
+                        card.classList.remove('active');
+                        card.setAttribute('aria-expanded', 'false');
+                        activeBentoIndex = -1;
+                    } else {
+                        setActiveIndex(index);
+                    }
+                } else {
+                    setActiveIndex(index);
+                }
+            }
+        });
+    });
 
 
     // ----------------------------------------------------------------------
@@ -649,5 +674,59 @@ document.addEventListener('DOMContentLoaded', () => {
             width = canvas.width = container.clientWidth;
             height = canvas.height = container.clientHeight;
         });
+    }
+
+    // ----------------------------------------------------------------------
+    // 7. SCROLL-REVEAL OBSERVATION
+    // ----------------------------------------------------------------------
+    const revealEls = document.querySelectorAll('.reveal');
+    if (revealEls.length > 0) {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        revealEls.forEach(el => revealObserver.observe(el));
+    }
+
+    // ----------------------------------------------------------------------
+    // 8. MOBILE HAMBURGER MENU TOGGLE
+    // ----------------------------------------------------------------------
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navMenu = document.getElementById('nav-menu');
+    if (hamburgerBtn && navMenu) {
+        hamburgerBtn.addEventListener('click', () => {
+            const isOpen = navMenu.classList.toggle('mobile-open');
+            hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        // Close mobile menu when a nav link is clicked
+        navMenu.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                navMenu.classList.remove('mobile-open');
+                hamburgerBtn.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
+
+    // ----------------------------------------------------------------------
+    // 9. ACTIVE NAV ITEM ON SCROLL
+    // ----------------------------------------------------------------------
+    const sections = document.querySelectorAll('section[id]');
+    const navItems = document.querySelectorAll('.nav-item');
+    if (sections.length > 0 && navItems.length > 0) {
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navItems.forEach(item => item.classList.remove('nav-active'));
+                    const activeLink = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
+                    if (activeLink) activeLink.classList.add('nav-active');
+                }
+            });
+        }, { threshold: 0.4, rootMargin: "-80px 0px -20% 0px" });
+        sections.forEach(s => sectionObserver.observe(s));
     }
 });

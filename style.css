@@ -6,26 +6,26 @@
 /* Google Fonts imported in HTML: Inter (Body) & JetBrains Mono (Headings/Monospace) */
 
 :root {
-    /* Color Palette - Linear App Design System */
-    --color-bg-base: #010102;               /* Canvas (near-black) */
-    --color-bg-card: rgba(15, 16, 17, 0.7);   /* Surface 1 with high transparency for glassmorphism */
-    --color-bg-card-solid: #0f1011;         /* Surface 1 solid */
-    --color-surface-2: #141516;             /* Surface 2 */
-    --color-surface-3: #18191a;             /* Surface 3 */
-    --color-surface-4: #191a1b;             /* Surface 4 */
+    /* Color Palette - Oceanic Noir Hackathon Design System */
+    --color-bg-base: #172B36;               /* Oceanic Noir base canvas */
+    --color-bg-card: rgba(17, 76, 90, 0.4);   /* Nocturnal Expedition translucent */
+    --color-bg-card-solid: #114C5A;         /* Nocturnal Expedition solid */
+    --color-surface-2: #133842;             /* Surface 2 */
+    --color-surface-3: #15414d;             /* Surface 3 */
+    --color-surface-4: #1b4b57;             /* Surface 4 */
     
-    --color-accent-primary: #5e6ad2;        /* Linear Lavender-Blue */
-    --color-accent-secondary: #828fff;      /* Primary Hover (Lavender Light) */
-    --color-accent-focus: #5e69d1;          /* Primary Focus */
+    --color-accent-primary: #FFC801;        /* Forsythia Accent */
+    --color-accent-secondary: #FF9932;      /* Deep Saffron Accent */
+    --color-accent-focus: #e6b400;          /* Forsythia Focus */
     
-    --color-text-main: #f7f8f8;             /* Ink (light grey) */
-    --color-text-muted: #d0d6e0;            /* Ink Muted */
-    --color-text-subtle: #8a8f98;           /* Ink Subtle */
-    --color-text-tertiary: #62666d;         /* Ink Tertiary */
+    --color-text-main: #F1F6F4;             /* Arctic Powder (Light grey) */
+    --color-text-muted: #D9E8E2;            /* Mystic Mint (Cyan-tinted white) */
+    --color-text-subtle: #a2bdbe;           /* Ink Subtle */
+    --color-text-tertiary: #6f8f90;         /* Ink Tertiary */
     
-    --color-hairline: #23252a;              /* Hairline border */
-    --color-hairline-strong: #34343a;       /* Hairline strong */
-    --color-hairline-tertiary: #3e3e44;     /* Hairline tertiary */
+    --color-hairline: rgba(255, 255, 255, 0.08);              /* Hairline border */
+    --color-hairline-strong: rgba(255, 255, 255, 0.16);       /* Hairline strong */
+    --color-hairline-tertiary: rgba(255, 255, 255, 0.24);     /* Hairline tertiary */
     
     /* Layout Spacing */
     --spacing-xs: 8px;
@@ -45,8 +45,8 @@
     --border-radius-xxl: 24px;
     --border-radius-pill: 9999px;
     
-    --border-glow: 0 0 20px rgba(94, 106, 210, 0.08);
-    --border-glow-active: 0 0 35px rgba(94, 106, 210, 0.2);
+    --border-glow: 0 0 20px rgba(255, 200, 1, 0.12);
+    --border-glow-active: 0 0 35px rgba(255, 153, 50, 0.25);
 
     /* Font Families */
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
@@ -98,31 +98,32 @@ body {
 
 /* Typography elements */
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-sans);
-    font-weight: 600;
+    font-family: var(--font-mono);
+    font-weight: 700;
     color: var(--color-text-main);
+    letter-spacing: -0.02em;
     line-height: 1.1;
 }
 
 h1 {
     font-size: 5rem; /* 80px */
-    letter-spacing: -3.0px;
+    letter-spacing: -0.03em;
     line-height: 1.05;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 h2 {
     font-size: 3.5rem; /* 56px */
-    letter-spacing: -1.8px;
+    letter-spacing: -0.02em;
     line-height: 1.1;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 h3 {
     font-size: 1.375rem; /* 22px */
-    letter-spacing: -0.4px;
+    letter-spacing: -0.01em;
     line-height: 1.25;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 p {
@@ -158,17 +159,17 @@ a {
 }
 
 .btn-primary {
-    background: var(--color-accent-primary);
-    color: #ffffff;
+    background: linear-gradient(135deg, var(--color-accent-primary) 0%, var(--color-accent-secondary) 100%);
+    color: var(--color-bg-base);
     border-color: var(--color-accent-primary);
-    box-shadow: 0 4px 12px rgba(94, 106, 210, 0.15);
+    box-shadow: 0 4px 12px rgba(255, 200, 1, 0.3);
 }
 
 .btn-primary:hover {
     background: var(--color-accent-secondary);
     border-color: var(--color-accent-secondary);
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(94, 106, 210, 0.25);
+    box-shadow: 0 6px 16px rgba(255, 153, 50, 0.3);
 }
 
 .btn-secondary {
@@ -205,9 +206,9 @@ a {
 }
 
 .badge-yellow {
-    background-color: rgba(94, 106, 210, 0.1);
+    background-color: rgba(255, 200, 1, 0.1);
     color: var(--color-accent-primary);
-    border: 1px solid rgba(94, 106, 210, 0.2);
+    border: 1px solid rgba(255, 200, 1, 0.2);
 }
 
 .text-gradient {
@@ -494,7 +495,7 @@ a {
     text-align: center;
     overflow: hidden;
     min-height: calc(85vh - 50px);
-    background: radial-gradient(circle at 50% -20%, rgba(94, 106, 210, 0.12) 0%, var(--color-bg-base) 65%);
+    background: radial-gradient(circle at 50% -20%, rgba(255, 200, 1, 0.12) 0%, var(--color-bg-base) 65%);
 }
 
 .canvas-container {
@@ -527,6 +528,7 @@ a {
     border-radius: 9999px;
     padding: 0.35rem 1rem;
     backdrop-filter: blur(5px);
+    font-family: var(--font-mono);
 }
 
 .tag-icon {
@@ -623,7 +625,7 @@ a {
 }
 
 .section-badge {
-    font-family: var(--font-sans);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 500;
     color: var(--color-accent-primary);
@@ -682,13 +684,13 @@ a {
 
 .bento-card:hover {
     border-color: var(--color-hairline-strong);
-    box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px rgba(94, 106, 210, 0.04);
+    box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 200, 1, 0.04);
     transform: translateY(-2px);
 }
 
 .bento-card.active {
     border-color: var(--color-accent-primary);
-    box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.6), 0 0 25px rgba(94, 106, 210, 0.1);
+    box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 200, 1, 0.15);
 }
 
 /* Grid Spanning */
@@ -742,9 +744,9 @@ a {
 }
 
 .box-saffron {
-    background: rgba(94, 106, 210, 0.1);
+    background: rgba(255, 153, 50, 0.1);
     color: var(--color-accent-secondary);
-    border: 1px solid rgba(94, 106, 210, 0.2);
+    border: 1px solid rgba(255, 153, 50, 0.2);
 }
 
 .box-powder {
@@ -754,15 +756,16 @@ a {
 }
 
 .box-nocturnal {
-    background: rgba(94, 106, 210, 0.1);
-    color: var(--color-accent-primary);
-    border: 1px solid rgba(94, 106, 210, 0.2);
+    background: rgba(17, 76, 90, 0.2);
+    color: var(--color-text-muted);
+    border: 1px solid rgba(17, 76, 90, 0.4);
 }
 
 .card-title {
     font-size: 1.15rem;
-    font-family: var(--font-sans);
+    font-family: var(--font-mono);
     font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
 .accordion-arrow {
@@ -843,13 +846,13 @@ a {
 .bar {
     flex: 1;
     height: var(--val);
-    background: rgba(94, 106, 210, 0.3);
+    background: rgba(255, 200, 1, 0.25);
     border-radius: 3px 3px 0 0;
     transition: background-color var(--transition-micro);
 }
 
 .bar-chart .bar:hover {
-    background: rgba(94, 106, 210, 0.6);
+    background: rgba(255, 200, 1, 0.5);
 }
 
 .animate-bar {
@@ -1259,7 +1262,7 @@ a {
 }
 
 .discount-badge {
-    background: rgba(94, 106, 210, 0.1);
+    background: rgba(255, 200, 1, 0.1);
     color: var(--color-accent-primary);
     font-size: 0.75rem;
     padding: 0.15rem 0.4rem;
@@ -1563,7 +1566,7 @@ a {
    ========================================================================== */
 .cta-section {
     padding: 7rem 2rem;
-    background: radial-gradient(ellipse at 50% 0%, rgba(94, 106, 210, 0.14) 0%, var(--color-bg-base) 70%);
+    background: radial-gradient(ellipse at 50% 0%, rgba(255, 200, 1, 0.15) 0%, var(--color-bg-base) 70%);
     border-top: 1px solid var(--color-hairline);
     border-bottom: 1px solid var(--color-hairline);
     text-align: center;
@@ -1577,7 +1580,7 @@ a {
     gap: 1.75rem;
 }
 .cta-eyebrow {
-    font-family: var(--font-sans);
+    font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 500;
     color: var(--color-accent-primary);

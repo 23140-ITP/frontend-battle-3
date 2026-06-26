@@ -480,9 +480,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-        // Create Particle Material (Accent primary Linear lavender color)
+        // Create Particle Material (Accent primary Forsythia Yellow)
         const particleMaterial = new THREE.PointsMaterial({
-            color: 0x5e6ad2, // Linear Lavender #5e6ad2
+            color: 0xFFC801, // Forsythia Yellow
             size: 1.0,
             transparent: true,
             opacity: 0.8,
@@ -556,13 +556,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         linePosArr[lineIdx * 6 + 4] = posArr[j * 3 + 1];
                         linePosArr[lineIdx * 6 + 5] = posArr[j * 3 + 2];
 
-                        // Gradient lines: transition from lavender to purple-indigo based on depth
+                        // Gradient lines: transition from Forsythia to Saffron based on depth
                         const alpha = 1 - (dist / 22);
-                        // Lavender: rgb(94, 106, 210) => r=0.37, g=0.42, b=0.82
-                        // Purple-indigo: rgb(130, 143, 255) => r=0.51, g=0.56, b=1.00
-                        const r = 0.37 + (0.14 * alpha);
-                        const g = 0.42 + (0.14 * alpha);
-                        const b = 0.82 + (0.18 * alpha);
+                        // Forsythia: rgb(255, 200, 1) => r=1.00, g=0.78, b=0.00
+                        // Deep Saffron: rgb(255, 153, 50) => r=1.00, g=0.60, b=0.20
+                        const r = 1.0;
+                        const g = 0.60 + (0.184 * alpha);
+                        const b = 0.196 - (0.192 * alpha);
 
                         lineColArr[lineIdx * 6] = r * alpha;
                         lineColArr[lineIdx * 6 + 1] = g * alpha;
@@ -646,7 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = '#5e6ad2';
+                ctx.fillStyle = '#FFC801';
                 ctx.fill();
 
                 // Draw connecting lines
@@ -660,7 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(p2.x, p2.y);
-                        ctx.strokeStyle = `rgba(130, 143, 255, ${0.15 * (1 - dist / 100)})`;
+                        ctx.strokeStyle = `rgba(255, 153, 50, ${0.15 * (1 - dist / 100)})`;
                         ctx.lineWidth = 0.5;
                         ctx.stroke();
                     }
